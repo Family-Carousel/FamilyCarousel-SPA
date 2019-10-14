@@ -1,0 +1,14 @@
+{
+    "dev": {
+        "awscloudformation": {
+            "AuthRoleName": "familycarousel-spa-dev-20191013211703-authRole",
+            "UnauthRoleArn": "arn:aws:iam::734980667868:role/familycarousel-spa-dev-20191013211703-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::734980667868:role/familycarousel-spa-dev-20191013211703-authRole",
+            "Region": "us-east-1",
+            "DeploymentBucketName": "familycarousel-spa-dev-20191013211703-deployment",
+            "UnauthRoleName": "familycarousel-spa-dev-20191013211703-unauthRole",
+            "StackName": "familycarousel-spa-dev-20191013211703",
+            "StackId": "arn:aws:cloudformation:us-east-1:734980667868:stack/familycarousel-spa-dev-20191013211703/cd843ab0-ee20-11e9-b027-0e162d0e1748"
+        }
+    }
+}
