@@ -5,13 +5,5 @@
 </template>
 
 <script>
-export default {
-  components: {}
-};
+export default {};
 </script>
-
-<style>
-h1 {
-  color: #0a3953;
-}
-</style>
