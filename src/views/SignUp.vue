@@ -1,18 +1,17 @@
 <template>
   <v-flex xs12 sm8 md4>
-    <div v-if="!signedIn">
-    <amplify-authenticator></amplify-authenticator>
-    </div>
-    <div v-if="signedIn">
-      <amplify-sign-out></amplify-sign-out>
-    </div>
-    <!-- <v-card class="elevation-12">
+    <v-flex xs12>
+      <router-link to="/">
+        <v-img :src="require('../assets/logo.png')" class="mb-8" contain height="200"></v-img>
+      </router-link>
+    </v-flex>
+    <v-card class="elevation-12">
       <v-toolbar dark color="primary">
         <v-toolbar-title>Sign Up</v-toolbar-title>
       </v-toolbar>
       <v-card-text>
         <v-form>
-          <v-text-field label="Login" name="login" prepend-icon="person" type="text"></v-text-field>
+          <v-text-field label="email" name="email" prepend-icon="email" type="text"></v-text-field>
           <v-text-field
             id="password"
             label="Password"
@@ -20,28 +19,39 @@
             prepend-icon="lock"
             type="password"
           ></v-text-field>
+          <v-checkbox
+            v-model="checkbox"
+            :rules="[v => !!v || 'you must agree to continue!']"
+            label="Do you Agree?"
+            required
+          ></v-checkbox>
         </v-form>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" large>Sign Up</v-btn>
+          <v-spacer></v-spacer>
+        </v-card-actions>
       </v-card-text>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn color="primary">Sign Up</v-btn>
-        <v-btn color="primary" to="/">Cancel</v-btn>
-      </v-card-actions>
-    </v-card> -->
+    </v-card>
+    <br />
+    <p align="center">
+      Have an account?
+      <a href="login">login</a>
+    </p>
   </v-flex>
 </template>
 
 <script>
 import LoginOrSignUpLayout from "../layouts/LoginOrSignupLayout";
-import { Auth } from 'aws-amplify';
-import { AmplifyEventBus } from 'aws-amplify-vue';
+import { Auth } from "aws-amplify";
+import { AmplifyEventBus } from "aws-amplify-vue";
 
 export default {
   created() {
     this.$emit(`update:layout`, LoginOrSignUpLayout);
     this.isUserSignedIn();
-    AmplifyEventBus.$on('authState', info => {
-      if (info === 'signedIn') {
+    AmplifyEventBus.$on("authState", info => {
+      if (info === "signedIn") {
         this.isUserSignedIn();
       } else {
         this.signedIn = false;
@@ -51,19 +61,18 @@ export default {
   data() {
     return {
       signedIn: false
-    }
+    };
   },
   methods: {
     async isUserSignedIn() {
       try {
-      const userObj = await Auth.currentAuthenticatedUser();
-      this.signedIn = true;
-      console.log(userObj);
+        const userObj = await Auth.currentAuthenticatedUser();
+        this.signedIn = true;
+        console.log(userObj);
       } catch (e) {
         this.signedIn = false;
-        console.log(err);
+        console.log(e);
       }
-        
     }
   }
 };
