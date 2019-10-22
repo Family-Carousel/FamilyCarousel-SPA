@@ -16,20 +16,27 @@ export default new Router({
     {
       path: '/signup',
       name: 'signup',
-      component: () => import('./views/SignUp.vue')
+      component: () => import('./views/Auth/SignUp.vue')
     },
     {
       path: '/login',
       name: 'login',
-      component: () => import('./views/Login.vue')
+      component: () => import('./views/Auth/Login.vue')
+    },
+    {
+      path: '/confirmSignup',
+      name: 'confirmSignup',
+      component: () => import('./views/Auth/ConfirmSignup.vue')
+    },
+    {
+      path: '/forgotPassword',
+      name: 'forgotPassword',
+      component: () => import('./views/Auth/ForgotPassword.vue')
     },
     {
       path: '/about',
       name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
+      component: () => import('./views/About.vue')
     }
   ]
 })
