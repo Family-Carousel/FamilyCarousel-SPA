@@ -56,12 +56,10 @@ export default {
   methods: {
     async isUserSignedIn() {
       try {
-        const userObj = await Auth.currentAuthenticatedUser();
+        await Auth.currentAuthenticatedUser();
         this.signedIn = true;
-        console.log(userObj);
       } catch (e) {
         this.signedIn = false;
-        console.log(e);
       }
     }
   }

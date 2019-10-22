@@ -80,12 +80,10 @@ export default {
   methods: {
     async isUserSignedIn() {
       try {
-        const userObj = await Auth.currentAuthenticatedUser();
+        await Auth.currentAuthenticatedUser();
         this.signedIn = true;
-        console.log(userObj);
       } catch (e) {
         this.signedIn = false;
-        console.log(e);
       }
     },
     async createAccount() {
@@ -99,15 +97,13 @@ export default {
         },
         validationData: []
       })
-        .then(data => {
+        .then(() => {
           this.apiRequest = false;
-          console.log(data);
           this.$router.push({
             path: "/confirmSignup",
             query: { email: this.email }
           });
-        })
-        .catch(err => console.log(err));
+        });
     }
   }
 };

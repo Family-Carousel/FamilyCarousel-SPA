@@ -68,26 +68,22 @@ export default {
   methods: {
     async isUserSignedIn() {
       try {
-        const userObj = await Auth.currentAuthenticatedUser();
+        await Auth.currentAuthenticatedUser();
         this.signedIn = true;
-        console.log(userObj);
       } catch (e) {
         this.signedIn = false;
-        console.log(e);
       }
     },
     async loginUser() {
       this.apiRequest = true;
       Auth.signIn(this.email, this.password)
-        .then(user => {
-          console.log(user);
+        .then(() => {
           this.apiRequest = false;
           this.$router.push({
             path: "/",
             query: { email: this.email }
           });
-        })
-        .catch(err => console.log(err));
+        });
     }
   }
 };

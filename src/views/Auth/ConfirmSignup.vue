@@ -68,25 +68,21 @@ export default {
   methods: {
     async isUserSignedIn() {
       try {
-        const userObj = await Auth.currentAuthenticatedUser();
+        await Auth.currentAuthenticatedUser();
         this.signedIn = true;
-        console.log(userObj);
       } catch (e) {
         this.signedIn = false;
-        console.log(e);
       }
     },
     async confirmSignup() {
       Auth.confirmSignUp(this.email, this.confirmCode, {
         forceAliasCreation: true
       })
-        .then(data => {
-          console.log(data);
+        .then(() => {
           this.$router.push({
             path: "/login"
           });
-        })
-        .catch(err => console.log(err));
+        });
     }
   }
 };
