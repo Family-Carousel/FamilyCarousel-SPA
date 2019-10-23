@@ -80,8 +80,7 @@ export default {
         .then(() => {
           this.apiRequest = false;
           this.$router.push({
-            path: "/",
-            query: { email: this.email }
+            path: "/familydashboard"
           });
         });
     }

@@ -6,14 +6,14 @@
 
 <script>
 import HomeComponent from "../components/HomeComponent.vue";
-import DashboardLayout from "../layouts/DashboardLayout";
+import DefaultLayout from "../layouts/DefaultLayout";
 
 export default {
   components: {
     HomeComponent
   },
   created() {
-    this.$emit(`update:layout`, DashboardLayout);
+    this.$emit(`update:layout`, DefaultLayout);
   }
 };
 </script>
