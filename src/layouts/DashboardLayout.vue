@@ -25,7 +25,7 @@
                 </v-list-item-content>
               </v-list-item>
             </template>
-            <v-list-item v-for="(child, i) in item.children" :key="i">
+            <v-list-item class="ml-6" v-for="(child, i) in item.children" :key="i">
               <v-list-item-action v-if="child.icon">
                 <v-icon>{{ child.icon }}</v-icon>
               </v-list-item-action>
@@ -49,7 +49,7 @@
     <v-app-bar :clipped-left="$vuetify.breakpoint.lgAndUp" app color="primary" dark>
       <v-toolbar-title style="width: 300px" class="ml-0 pl-4">
         <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-        <span class="hidden-sm-and-down">Google Contacts</span>
+        <span class="hidden-sm-and-down">Family Carousel</span>
       </v-toolbar-title>
       <v-text-field
         flat
@@ -61,15 +61,10 @@
       ></v-text-field>
       <v-spacer></v-spacer>
       <v-btn icon>
-        <v-icon>mdi-apps</v-icon>
-      </v-btn>
-      <v-btn icon>
         <v-icon>mdi-bell</v-icon>
       </v-btn>
-      <v-btn icon large>
-        <v-avatar size="32px" item>
-          <v-img src="https://cdn.vuetifyjs.com/images/logos/logo.svg" alt="Vuetify"></v-img>
-        </v-avatar>
+      <v-btn icon @click="logout">
+        <v-icon>logout</v-icon>
       </v-btn>
     </v-app-bar>
     <v-content>
@@ -77,10 +72,16 @@
         <slot />
       </v-container>
     </v-content>
-    <v-btn bottom color="pink" dark fab fixed right @click="dialog = !dialog">
+
+    <!-- Button to add a family member -->
+    <!-- <v-btn bottom color="pink" dark fab fixed right @click="dialog = !dialog">
       <v-icon>mdi-plus</v-icon>
-    </v-btn>
-    <v-dialog v-model="dialog" width="800px">
+    </v-btn>-->
+
+    <!--  -->
+    <!-- Use this for add a family member pop up -->
+    <!--  -->
+    <!-- <v-dialog v-model="dialog" width="800px">
       <v-card>
         <v-card-title class="grey darken-2">Create contact</v-card-title>
         <v-container>
@@ -117,47 +118,45 @@
           <v-btn text @click="dialog = false">Save</v-btn>
         </v-card-actions>
       </v-card>
-    </v-dialog>
+    </v-dialog>-->
   </v-app>
 </template>
 
 <script>
+import { Auth } from "aws-amplify";
+
 export default {
   props: {
     source: String
+  },
+  methods: {
+    logout() {
+      Auth.signOut().then(() => {
+        this.$router.push({
+          path: "/login"
+        });
+      });
+    }
   },
   data: () => ({
     dialog: false,
     drawer: null,
     items: [
-      { icon: "contacts", text: "Contacts" },
-      { icon: "history", text: "Frequently contacted" },
-      { icon: "content_copy", text: "Duplicates" },
+      { icon: "people", text: "My Family" },
       {
         icon: "keyboard_arrow_up",
         "icon-alt": "keyboard_arrow_down",
-        text: "Labels",
+        text: "Tasks",
         model: true,
-        children: [{ icon: "add", text: "Create label" }]
-      },
-      {
-        icon: "keyboard_arrow_up",
-        "icon-alt": "keyboard_arrow_down",
-        text: "More",
-        model: false,
         children: [
-          { text: "Import" },
-          { text: "Export" },
-          { text: "Print" },
-          { text: "Undo changes" },
-          { text: "Other contacts" }
+          { icon: "work", text: "Chores" },
+          { icon: "list", text: "Reminders" },
+          { icon: "games", text: "Fun Things" }
         ]
       },
-      { icon: "settings", text: "Settings" },
-      { icon: "chat_bubble", text: "Send feedback" },
       { icon: "help", text: "Help" },
-      { icon: "phonelink", text: "App downloads" },
-      { icon: "keyboard", text: "Go to the old version" }
+      { icon: "settings", text: "Profile" },
+      { icon: "chat_bubble", text: "Send feedback" }
     ]
   })
 };

@@ -1,12 +1,11 @@
 <template>
   <div>
-    <v-btn @click="logout">Logout</v-btn>
+      <p>this is the default My Family Home Page</p>
   </div>
 </template>
 
 <script>
 import DashboardLayout from "../../layouts/DashboardLayout";
-import { Auth } from "aws-amplify";
 
 export default {
   components: {
@@ -14,15 +13,6 @@ export default {
   },
   created() {
     this.$emit(`update:layout`, DashboardLayout);
-  },
-  methods: {
-    logout() {
-      Auth.signOut().then(() => {
-        this.$router.push({
-          path: "/login"
-        });
-      });
-    }
   }
 };
 </script>
