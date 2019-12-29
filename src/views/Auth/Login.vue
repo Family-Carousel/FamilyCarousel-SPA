@@ -11,7 +11,7 @@
       </v-toolbar>
       <v-progress-linear v-if="apiRequest" :indeterminate="true" class="ma-0"></v-progress-linear>
       <v-card-text>
-        <v-form>
+        <v-form >
           <v-text-field v-model="email" label="email" name="email" prepend-icon="email" type="text"></v-text-field>
           <v-text-field
             v-model="password"
@@ -80,8 +80,7 @@ export default {
         .then(() => {
           this.apiRequest = false;
           this.$router.push({
-            path: "/",
-            query: { email: this.email }
+            path: "/familydashboard"
           });
         });
     }

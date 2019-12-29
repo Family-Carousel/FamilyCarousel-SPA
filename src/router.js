@@ -29,6 +29,11 @@ export default new Router({
       component: () => import('./views/Auth/ConfirmSignup.vue')
     },
     {
+      path: '/familydashboard',
+      name: 'familydashboard',
+      component: () => import('./views/Family/FamilyHome.vue')
+    },
+    {
       path: '/forgotPassword',
       name: 'forgotPassword',
       component: () => import('./views/Auth/ForgotPassword.vue')
