@@ -15,6 +15,11 @@
         {{snackbar.text}}
         <v-btn text @click="snackbar.showing = false">Close</v-btn>
       </v-snackbar>
+      <v-footer app>
+        <v-col class="text-left">&copy; {{ new Date().getFullYear() }}</v-col>
+        <v-col></v-col>
+        <v-col class="text-right">v{{ $store.getters.appVersion }}</v-col>
+      </v-footer>
     </v-app>
   </div>
 </template>
@@ -26,6 +31,9 @@ export default {
     return {
       layout: `div`
     };
+  },
+  created() {
+    document.title = process.env.VUE_APP_NAME;
   }
 };
 </script>

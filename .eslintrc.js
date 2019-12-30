@@ -6,7 +6,7 @@ module.exports = {
   },
   'extends': [
     'plugin:vue/essential',
-    'eslint:standard'
+    'eslint:recommended'
   ],
   rules: {
     semi: ['error', 'always'],
@@ -21,4 +21,4 @@ module.exports = {
   parserOptions: {
     parser: 'babel-eslint'
   }  
-}
+};
