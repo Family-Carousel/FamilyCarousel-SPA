@@ -76,7 +76,8 @@ export default {
   },
   methods: {
     submitForm() {
-      this.$refs.form.submit()
+      this.$store.dispatch('snackbar/setSnackbar', {text: `Thanks for signing up for our mailing list!`});
+      this.$refs.form.submit();
       this.email = null;
       this.firstName = null;
     }
