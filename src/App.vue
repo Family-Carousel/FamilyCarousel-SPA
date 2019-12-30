@@ -4,6 +4,7 @@
       <component :is="layout">
         <router-view :layout.sync="layout" />
       </component>
+
       <v-snackbar
         v-for="(snackbar, index) in snackbars.filter(s => s.showing)"
         :key="snackbar.text + Math.random()"
@@ -15,22 +16,22 @@
         {{snackbar.text}}
         <v-btn text @click="snackbar.showing = false">Close</v-btn>
       </v-snackbar>
-      <v-footer app>
-        <v-col class="text-left">&copy; {{ new Date().getFullYear() }}</v-col>
-        <v-col></v-col>
-        <v-col class="text-right">v{{ $store.getters.appVersion }}</v-col>
-      </v-footer>
     </v-app>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
   name: "App",
   data() {
     return {
       layout: `div`
     };
+  },
+  computed: {
+    ...mapState('snackbar', ['snackbars'])
   },
   created() {
     document.title = process.env.VUE_APP_NAME;

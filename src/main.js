@@ -17,7 +17,7 @@ Amplify.configure(awsconfig);
 
 Vue.use(AmplifyPlugin, AmplifyModules);
 Vue.use(vuelidate);
-Vue.user(VueLogger, {
+Vue.use(VueLogger, {
   isEnabled: true,
   logLevel: process.env.VUE_APP_LOG_LEVEL || 'debug',
   stringifyArguments: false,

@@ -1,24 +1,27 @@
 const state = {
-    items: [],
-    currentSnackbar: {}
+  snackbars: []
 };
 
 const mutations = {
-
+  setSnackbar(statePassThrough, snackbar) {
+    if (!snackbar) {
+      return;
+    }
+    statePassThrough.snackbars = state.snackbars.concat(snackbar);
+  }
 };
 
 const actions = {
-
-};
-
-const getters = {
-
+  setSnackbar({ commit }, snackbar) {
+    snackbar.showing = true;
+    snackbar.color = snackbar.color || "success";
+    commit("setSnackbar", snackbar);
+  }
 };
 
 export default {
-    namespaced: true,
-    state,
-    actions,
-    mutations,
-    getters
+  namespaced: true,
+  state,
+  actions,
+  mutations
 };

@@ -133,7 +133,7 @@ export default {
     logout() {
       Auth.signOut().then(() => {
         this.$router.push({
-          path: "/login"
+          path: "/"
         });
       });
     }
