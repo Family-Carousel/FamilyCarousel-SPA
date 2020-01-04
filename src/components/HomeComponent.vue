@@ -69,19 +69,25 @@
 <script lang="ts">
 import Vue from 'vue';
 
+interface HomeComponentData {
+  email: string,
+  firstName: string
+}
+
 export default Vue.extend({
-  data() {
+  name: 'HomeComponent',
+  data(): HomeComponentData {
     return {
-      email: null,
-      firstName: null
+      email: '',
+      firstName: ''
     };
   },
   methods: {
-    submitForm() {
+    submitForm(): void {
       this.$store.dispatch('snackbar/setSnackbar', {text: `Thanks for signing up for our mailing list!`});
       this.$refs.form.submit();
-      this.email = null;
-      this.firstName = null;
+      this.email = '';
+      this.firstName = '';
     }
   }
 });

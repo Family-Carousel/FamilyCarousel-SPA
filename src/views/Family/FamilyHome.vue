@@ -18,7 +18,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import DashboardLayout from "../../layouts/DashboardLayout";
+import DashboardLayout from "../../layouts/DashboardLayout.vue";
 
 export default Vue.extend({
   components: {

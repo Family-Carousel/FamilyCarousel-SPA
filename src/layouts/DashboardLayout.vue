@@ -123,15 +123,30 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import Vue from "vue";
 import { Auth } from "aws-amplify";
 
+interface DashboardLayoutObject {
+  icon: string,
+  'icon-alt'?: string,
+  text: string,
+  model?: boolean,
+  children?: DashboardLayoutObject[]
+}
+
+interface DashboardLayoutData {
+  dialog: boolean,
+  drawer: boolean,
+  items: DashboardLayoutObject[]
+}
+
 export default Vue.extend({
+  name: 'DashboardLayout',
   props: {
     source: String
   },
   methods: {
-    logout() {
+    logout(): void {
       Auth.signOut().then(() => {
         this.$router.push({
           path: "/"
@@ -139,26 +154,28 @@ export default Vue.extend({
       });
     }
   },
-  data: () => ({
-    dialog: false,
-    drawer: null,
-    items: [
-      { icon: "people", text: "My Family" },
-      {
-        icon: "keyboard_arrow_up",
-        "icon-alt": "keyboard_arrow_down",
-        text: "Tasks",
-        model: true,
-        children: [
-          { icon: "work", text: "Chores" },
-          { icon: "list", text: "Reminders" },
-          { icon: "games", text: "Fun Things" }
-        ]
-      },
-      { icon: "help", text: "Help" },
-      { icon: "settings", text: "Profile" },
-      { icon: "chat_bubble", text: "Send feedback" }
-    ]
-  })
+  data(): DashboardLayoutData {
+    return {
+      dialog: false,
+      drawer: false,
+      items: [
+        { icon: "people", text: "My Family" },
+        {
+          icon: "keyboard_arrow_up",
+          "icon-alt": "keyboard_arrow_down",
+          text: "Tasks",
+          model: true,
+          children: [
+            { icon: "work", text: "Chores" },
+            { icon: "list", text: "Reminders" },
+            { icon: "games", text: "Fun Things" }
+          ]
+        },
+        { icon: "help", text: "Help" },
+        { icon: "settings", text: "Profile" },
+        { icon: "chat_bubble", text: "Send feedback" }
+      ]
+    };
+  }
 });
 </script>

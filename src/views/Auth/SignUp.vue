@@ -124,13 +124,13 @@ export default Vue.extend({
     }
   },
   computed: {
-    displayNameErrors() {
+    displayNameErrors(): string[] {
       const errors = [];
       if (!this.$v.displayName.$dirty) return errors;
       !this.$v.displayName.required && errors.push("Username is required");
       return errors;
     },
-    passwordErrors() {
+    passwordErrors(): string[] {
       const errors = [];
       if (!this.$v.password.$dirty) return errors;
       !this.$v.password.required && errors.push("Password is required");
@@ -146,14 +146,14 @@ export default Vue.extend({
         errors.push("Password must contain a special character");
       return errors;
     },
-    emailErrors() {
+    emailErrors(): string[] {
       const errors = [];
       if (!this.$v.email.$dirty) return errors;
       !this.$v.email.required && errors.push("Email is required");
       !this.$v.email.email && errors.push("You must enter a valid email");
       return errors;
     },
-    userAgreementErrors() {
+    userAgreementErrors(): string[] {
       const errors = [];
       if (!this.$v.userAgreement.$dirty) return errors;
       !this.$v.userAgreement.required &&
@@ -162,7 +162,7 @@ export default Vue.extend({
     }
   },
   methods: {
-    async isUserSignedIn() {
+    async isUserSignedIn(): Promise<void> {
       try {
         await Auth.currentAuthenticatedUser();
         this.signedIn = true;
@@ -170,7 +170,7 @@ export default Vue.extend({
         this.signedIn = false;
       }
     },
-    async createAccount() {
+    async createAccount(): Promise<void> {
       this.$v.$touch();
       if (!this.$v.$dirty) {
         this.apiRequest = true;
