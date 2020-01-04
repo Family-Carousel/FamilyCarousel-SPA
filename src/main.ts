@@ -34,19 +34,19 @@ new Vue({
   store,
   vuetify,
   created() {
-    axios.interceptors.request.use(
-      config => {
-        const token = false;
-        
-        if (token) {
-          config.headers['Authorization'] = `Bearer ${token}`;
-        }
-        return config;
-      },
-      error => {
-        return Promise.reject(error);
-      }
-    );
+	axios.interceptors.request.use(
+		config => {
+		const token = false;
+
+		if (token) {
+			config.headers.Authorization = `Bearer ${token}`;
+		}
+		return config;
+		},
+		error => {
+		return Promise.reject(error);
+		}
+	);
   },
   render: h => h(App)
 }).$mount('#app');

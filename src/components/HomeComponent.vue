@@ -69,7 +69,7 @@
 <script lang="ts">
 import Vue from 'vue';
 
-export default VUe.extend({
+export default Vue.extend({
   data() {
     return {
       email: null,
@@ -77,7 +77,7 @@ export default VUe.extend({
     };
   },
   methods: {
-    submitForm(): void {
+    submitForm() {
       this.$store.dispatch('snackbar/setSnackbar', {text: `Thanks for signing up for our mailing list!`});
       this.$refs.form.submit();
       this.email = null;

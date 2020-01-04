@@ -6,14 +6,14 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   modules: {
-    snackbar
+	snackbar
   },
   state: {
-    packageVersion: process.env.PACKAGE_JSON_VERSION || '0.0.0'
+	packageVersion: process.env.PACKAGE_JSON_VERSION || '0.0.0'
   },
   getters: {
-    appVersion: state => {
-      return state.packageVersion;
-    }
+	appVersion: state => {
+		return state.packageVersion;
+	}
   }
 });

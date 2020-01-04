@@ -4,18 +4,18 @@ const state = {
 
 const mutations = {
   setSnackbar(statePassThrough, snackbar) {
-    if (!snackbar) {
-      return;
-    }
-    statePassThrough.snackbars = state.snackbars.concat(snackbar);
+	if (!snackbar) {
+		return;
+	}
+	statePassThrough.snackbars = state.snackbars.concat(snackbar);
   }
 };
 
 const actions = {
   setSnackbar({ commit }, snackbar) {
-    snackbar.showing = true;
-    snackbar.color = snackbar.color || "success";
-    commit("setSnackbar", snackbar);
+	snackbar.showing = true;
+	snackbar.color = snackbar.color || 'success';
+	commit('setSnackbar', snackbar);
   }
 };
 
