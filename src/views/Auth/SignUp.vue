@@ -73,7 +73,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import LoginOrSignUpLayout from "../../layouts/LoginOrSignupLayout";
+import LoginOrSignUpLayout from "../../layouts/LoginOrSignupLayout.vue";
 import { Auth } from "aws-amplify";
 import { AmplifyEventBus } from "aws-amplify-vue";
 import { required, minLength, email } from "vuelidate/lib/validators";

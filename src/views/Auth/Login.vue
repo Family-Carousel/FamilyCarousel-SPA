@@ -42,7 +42,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import LoginOrSignUpLayout from "../../layouts/LoginOrSignupLayout";
+import LoginOrSignUpLayout from "../../layouts/LoginOrSignupLayout.vue";
 import { Auth } from "aws-amplify";
 import { AmplifyEventBus } from "aws-amplify-vue";
 
@@ -67,7 +67,7 @@ export default Vue.extend({
     };
   },
   methods: {
-    async isUserSignedIn() {
+    async isUserSignedIn(): Promise<void> {
       try {
         await Auth.currentAuthenticatedUser();
         this.signedIn = true;
@@ -75,7 +75,7 @@ export default Vue.extend({
         this.signedIn = false;
       }
     },
-    async loginUser() {
+    async loginUser(): Promise<void> {
       this.apiRequest = true;
       Auth.signIn(this.email, this.password)
         .then(() => {
