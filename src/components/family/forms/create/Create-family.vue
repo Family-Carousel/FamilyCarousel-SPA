@@ -75,8 +75,10 @@
   </v-container>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue';
+
+export default Vue.extend({
   components: {},
   data() {
     return {
@@ -95,7 +97,7 @@ export default {
       this.step = 2;
     }
   }
-};
+});
 </script>
 
 <style lang="stylus" scoped></style>

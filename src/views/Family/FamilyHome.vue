@@ -16,10 +16,11 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue';
 import DashboardLayout from "../../layouts/DashboardLayout";
 
-export default {
+export default Vue.extend({
   components: {
     
   },
@@ -31,5 +32,5 @@ export default {
   created() {
     this.$emit(`update:layout`, DashboardLayout);
   }
-};
+});
 </script>

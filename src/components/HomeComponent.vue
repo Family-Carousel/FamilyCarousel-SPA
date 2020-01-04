@@ -66,8 +66,10 @@
   </v-container>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue';
+
+export default VUe.extend({
   data() {
     return {
       email: null,
@@ -75,14 +77,14 @@ export default {
     };
   },
   methods: {
-    submitForm() {
+    submitForm(): void {
       this.$store.dispatch('snackbar/setSnackbar', {text: `Thanks for signing up for our mailing list!`});
       this.$refs.form.submit();
       this.email = null;
       this.firstName = null;
     }
   }
-};
+});
 </script>
 
 <style>

@@ -122,10 +122,11 @@
   </v-app>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue';
 import { Auth } from "aws-amplify";
 
-export default {
+export default Vue.extend({
   props: {
     source: String
   },
@@ -159,5 +160,5 @@ export default {
       { icon: "chat_bubble", text: "Send feedback" }
     ]
   })
-};
+});
 </script>

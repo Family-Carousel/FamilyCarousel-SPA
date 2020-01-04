@@ -71,7 +71,8 @@
   </v-flex>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue';
 import LoginOrSignUpLayout from "../../layouts/LoginOrSignupLayout";
 import { Auth } from "aws-amplify";
 import { AmplifyEventBus } from "aws-amplify-vue";
@@ -83,7 +84,7 @@ import {
   hasSpecialCharacter
 } from "../../validators/password";
 
-export default {
+export default Vue.extend({
   created() {
     this.$emit(`update:layout`, LoginOrSignUpLayout);
     this.isUserSignedIn();
@@ -191,5 +192,5 @@ export default {
       }
     }
   }
-};
+});
 </script>

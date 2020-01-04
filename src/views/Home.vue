@@ -4,16 +4,17 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue';
 import HomeComponent from "../components/HomeComponent.vue";
-import DefaultLayout from "../layouts/DefaultLayout";
+import DefaultLayout from "../layouts/DefaultLayout.vue";
 
-export default {
+export default Vue.extend({
   components: {
     HomeComponent
   },
   created() {
     this.$emit(`update:layout`, DefaultLayout);
   }
-};
+});
 </script>
