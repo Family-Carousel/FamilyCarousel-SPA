@@ -10,12 +10,12 @@
         ]
     },
     "rules": {
-        "interface-name": false,
-        "ordered-imports": false,
-        "object-literal-sort-keys": false,
+        "interface-name": true,
+        "ordered-imports": true,
+        "object-literal-sort-keys": true,
         "trailing-comma": false,
         "semicolon": true,
-        "arrow-parens": false,
+        "arrow-parens": true,
         "quotemark": [
             true,
             "single"

@@ -8,13 +8,17 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: "App",
-  data() {
-    return {
-      layout: `div`,
-    };
-  }
-};
+<script lang="ts">
+import { Vue, Component, PropSync, Provide } from 'vue-property-decorator';
+
+@Component
+export default class App extends Vue {
+
+  @Provide() layout = `div`
+  // data() {
+  //   return {
+  //     layout: `div`,
+  //   };
+  // }
+}
 </script>

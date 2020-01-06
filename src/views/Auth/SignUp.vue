@@ -73,6 +73,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
+import { validationMixin } from 'vuelidate';
 import LoginOrSignUpLayout from "../../layouts/LoginOrSignupLayout.vue";
 import { Auth } from "aws-amplify";
 import { AmplifyEventBus } from "aws-amplify-vue";
@@ -83,6 +84,7 @@ import {
   hasUpperCaseLetter,
   hasSpecialCharacter
 } from "../../validators/password";
+import { ValidationProperties } from 'vue/types/vue';
 
 export default Vue.extend({
   created() {

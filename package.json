@@ -21,6 +21,7 @@
     "regenerator-runtime": "^0.13.3",
     "vue": "^2.6.10",
     "vue-color": "^2.7.0",
+    "vue-property-decorator": "^8.3.0",
     "vue-router": "^3.0.3",
     "vue-simple-alert": "^1.1.1",
     "vue-snotify": "^3.2.1",
