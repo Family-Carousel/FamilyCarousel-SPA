@@ -1,27 +1,28 @@
-const state = {
-  snackbars: []
-};
+import store from '@/store/store';
+import { Action, getModule, Module, Mutation, VuexModule } from 'vuex-module-decorators';
+import { ISnackBar } from '../../../interfaces/ISnackBar';
 
-const mutations = {
-  setSnackbar(statePassThrough, snackbar) {
-	if (!snackbar) {
-		return;
-	}
-	statePassThrough.snackbars = state.snackbars.concat(snackbar);
-  }
-};
-
-const actions = {
-  setSnackbar({ commit }, snackbar) {
-	snackbar.showing = true;
-	snackbar.color = snackbar.color || 'success';
-	commit('setSnackbar', snackbar);
-  }
-};
-
-export default {
+@Module({
+  dynamic: true,
+  name: 'SnackBarModule',
   namespaced: true,
-  state,
-  actions,
-  mutations
-};
+  store
+})
+class SnackBarModule extends VuexModule {
+  public snackBars: ISnackBar[] = [];
+
+  @Action
+  public async setSnackBar(snackBar: ISnackBar) {
+    snackBar.showing = true;
+    snackBar.color = snackBar.color || 'success';
+    this.context.commit('SET_SNACKBAR', snackBar);
+  }
+
+  @Mutation
+  private SET_SNACKBAR(snackBar: ISnackBar) {
+    this.snackBars.concat(snackBar);
+  }
+
+}
+
+export default getModule(SnackBarModule);
