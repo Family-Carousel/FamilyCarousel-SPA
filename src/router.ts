@@ -33,6 +33,11 @@ export default new Router({
         path: '/familydashboard'
     },
     {
+        component: () => import('./views/Family/FamilyPicker.vue'),
+        name: 'familyPicker',
+        path: '/familyPicker'
+    },
+    {
         component: () => import('./views/Auth/ForgotPassword.vue'),
         name: 'forgotPassword',
         path: '/forgotPassword'

@@ -85,7 +85,8 @@ export default class HomeComponent extends Vue {
   private submitForm(): void {
     SnackBar.setSnackBar({
       text: `Thanks for signing up for our mailing list!`,
-      timeout: 6000
+      timeout: 6000,
+      color: 'success'
     });
     (this.$refs.form as HTMLFormElement).submit();
     this.email = "";

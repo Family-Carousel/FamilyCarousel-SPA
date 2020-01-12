@@ -42,6 +42,8 @@
 
 <script lang="ts">
 import LoginOrSignUpLayout from '@/layouts/LoginOrSignupLayout.vue';
+import { SnackBar } from '@/store/modules/snackbar/store-snackbar';
+import { UserAuth } from '@/store/modules/auth/store.auth';
 import { Auth } from 'aws-amplify';
 import { AmplifyEventBus } from 'aws-amplify-vue';
 import { Component, Vue } from 'vue-property-decorator';
@@ -78,12 +80,29 @@ export default class Login extends Vue {
 
   public async loginUser(): Promise<void> {
     this.apiRequest = true;
-    Auth.signIn(this.email, this.password).then(() => {
-      this.apiRequest = false;
-      this.$router.push({
-        path: '/familydashboard'
+    Auth.signIn(this.email, this.password)
+      .then((res) => {
+        console.log('sign in object', res);
+        UserAuth.setCurrentUser({
+          id: res.username,
+          email: res.attributes.email,
+          displayName: res.attributes.name,
+          loginTime: res.signInUserSession.idToken.payload.iat,
+          expTime: res.signInUserSession.idToken.payload.exp,
+          jwt: res.signInUserSession.accessToken.jwtToken
+        });
+        this.apiRequest = false;
+        this.$router.push({
+          path: '/familypicker'
+        });
+      })
+      .catch((err) => {
+        SnackBar.setSnackBar({
+          text: `${err.message}`,
+          timeout: 60000,
+          color: 'error'
+        });
       });
-    });
   }
 }
 </script>

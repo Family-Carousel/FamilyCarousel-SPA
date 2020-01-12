@@ -1,5 +1,6 @@
 import 'core-js/stable'; // ie11 fix
 import 'regenerator-runtime/runtime'; // ie11 fix
+// import 'vue-router/types/vue'; // Typescript router not part of type fix
 
 import Amplify, * as AmplifyModules from 'aws-amplify';
 import { AmplifyPlugin } from 'aws-amplify-vue';
@@ -36,17 +37,17 @@ new Vue({
   vuetify,
   created() {
     axios.interceptors.request.use(
-        (config) => {
+      (config) => {
         const token = false;
 
         if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
+          config.headers.Authorization = `Bearer ${token}`;
         }
         return config;
-        },
-        (error) => {
+      },
+      (error) => {
         return Promise.reject(error);
-        }
+      }
     );
   },
   // tslint:disable-next-line: object-literal-sort-keys

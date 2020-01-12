@@ -13,12 +13,7 @@ export interface IAuthState {
   store
 })
 class AuthModule extends VuexModule implements IAuthState {
-  public currentLoggedInUserData: IAuthData;
-
-  constructor(currentLoggedInUserData: IAuthData) {
-    super(currentLoggedInUserData);
-    this.currentLoggedInUserData = {};
- }
+  public currentLoggedInUserData!: IAuthData;
 
   @Action({ commit: 'SET_CURRENTUSER' })
   public async setCurrentUser(authObject: IAuthData): Promise<IAuthData> {
@@ -32,4 +27,4 @@ class AuthModule extends VuexModule implements IAuthState {
 
 }
 
-export const Auth = getModule(AuthModule);
+export const UserAuth = getModule(AuthModule);

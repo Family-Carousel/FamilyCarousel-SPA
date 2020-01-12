@@ -129,6 +129,7 @@
 
 <script lang="ts">
 import LoginOrSignUpLayout from '@/layouts/LoginOrSignupLayout.vue';
+import { SnackBar } from '@/store/modules/snackbar/store-snackbar';
 import {
   hasLowerCaseLetter,
   hasNumber,
@@ -196,8 +197,9 @@ export default class SignUp extends Vue {
   }
 
   public async createAccount(): Promise<void> {
+    let object;
     this.apiRequest = true;
-    Auth.signUp({
+    object = Auth.signUp({
       attributes: {
         email: this.email,
         name: this.displayName
@@ -206,13 +208,23 @@ export default class SignUp extends Vue {
       username: this.email,
 
       validationData: []
-    }).then(() => {
-      this.apiRequest = false;
-      this.$router.push({
-        path: '/confirmSignup',
-        query: { email: this.email }
+    })
+      .then(() => {
+        this.apiRequest = false;
+        console.log('signup object', object);
+        this.$router.push({
+          path: '/confirmSignup',
+          query: { email: this.email }
+        });
+      })
+      .catch((err) => {
+        SnackBar.setSnackBar({
+          text: `${err.message}`,
+          timeout: 60000,
+          color: 'error'
+        });
+        this.apiRequest = false;
       });
-    });
   }
 }
 </script>

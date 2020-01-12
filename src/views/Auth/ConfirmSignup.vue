@@ -41,6 +41,7 @@
 </template>
 
 <script lang="ts">
+import { SnackBar } from '@/store/modules/snackbar/store-snackbar';
 import { Auth } from 'aws-amplify';
 import { AmplifyEventBus } from 'aws-amplify-vue';
 import { Component, Vue } from 'vue-property-decorator';
@@ -50,12 +51,13 @@ import LoginOrSignUpLayout from '../../layouts/LoginOrSignupLayout.vue';
   name: 'ConfirmSignUp'
 })
 export default class ConfirmSignUp extends Vue {
-  private email: string = this.$route.query.email.toString() || '';
+  private email: string = '';
   private apiRequest: boolean = false;
   private signedIn: boolean = false;
   private confirmCode: string = '';
 
   public created() {
+    this.email = this.$route.query.email.toString();
     this.$emit(`update:layout`, LoginOrSignUpLayout);
     this.isUserSignedIn();
     AmplifyEventBus.$on('authState', (info) => {
@@ -67,7 +69,7 @@ export default class ConfirmSignUp extends Vue {
     });
   }
 
-  public async isUserSignedIn(): Promise<void> {
+  private async isUserSignedIn(): Promise<void> {
     try {
       await Auth.currentAuthenticatedUser();
       this.signedIn = true;
@@ -76,14 +78,22 @@ export default class ConfirmSignUp extends Vue {
     }
   }
 
-  public async confirmSignup(): Promise<void> {
+  private async confirmSignup(): Promise<void> {
     Auth.confirmSignUp(this.email, this.confirmCode, {
       forceAliasCreation: true
-    }).then(() => {
-      this.$router.push({
-        path: '/login'
+    })
+      .then(() => {
+        this.$router.push({
+          path: '/login'
+        });
+      })
+      .catch((err) => {
+        SnackBar.setSnackBar({
+          text: `${err.message}`,
+          timeout: 60000,
+          color: 'error'
+        });
       });
-    });
   }
 }
 </script>
