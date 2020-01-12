@@ -17,20 +17,17 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { Component, Vue } from 'vue-property-decorator';
 import DashboardLayout from "../../layouts/DashboardLayout.vue";
 
-export default Vue.extend({
-  components: {
-    
-  },
-  data() {
-    return {
-      familys: []
-    };
-  },
-  created() {
+@Component({
+  name: 'FamilyHomeView'
+})
+export default class FamilyHomeView extends Vue {
+  private familys = [];
+
+    created() {
     this.$emit(`update:layout`, DashboardLayout);
   }
-});
+}
 </script>
