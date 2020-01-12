@@ -5,19 +5,18 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
-import HomeComponent from "../components/HomeComponent.vue";
-import DefaultLayout from "@/layouts/DefaultLayout.vue";
+import DefaultLayout from '@/layouts/DefaultLayout.vue';
+import { Component, Vue } from 'vue-property-decorator';
+import HomeComponent from '../components/HomeComponent.vue';
 
 @Component({
-  name: 'HomeView',
   components: {
     HomeComponent
-  }
+  },
+  name: 'HomeView'
 })
-export default class HomeView extends Vue{
-
-  created(): void {
+export default class HomeView extends Vue {
+  public created(): void {
     this.$emit(`update:layout`, DefaultLayout);
   }
 }

@@ -41,25 +41,25 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
-import LoginOrSignUpLayout from "../../layouts/LoginOrSignupLayout.vue";
-import { Auth } from "aws-amplify";
-import { AmplifyEventBus } from "aws-amplify-vue";
+import LoginOrSignUpLayout from '@/layouts/LoginOrSignupLayout.vue';
+import { Auth } from 'aws-amplify';
+import { AmplifyEventBus } from 'aws-amplify-vue';
+import { Component, Vue } from 'vue-property-decorator';
 
 @Component({
-  name: "Login"
+  name: 'Login'
 })
 export default class Login extends Vue {
-  private password: string = "";
-  private email: string = "";
+  private password: string = '';
+  private email: string = '';
   private signedIn: boolean = false;
   private apiRequest: boolean = false;
 
-  created() {
+  public created() {
     this.$emit(`update:layout`, LoginOrSignUpLayout);
     this.isUserSignedIn();
-    AmplifyEventBus.$on("authState", info => {
-      if (info === "signedIn") {
+    AmplifyEventBus.$on('authState', (info) => {
+      if (info === 'signedIn') {
         this.isUserSignedIn();
       } else {
         this.signedIn = false;
@@ -67,7 +67,7 @@ export default class Login extends Vue {
     });
   }
 
-  async isUserSignedIn(): Promise<void> {
+  public async isUserSignedIn(): Promise<void> {
     try {
       await Auth.currentAuthenticatedUser();
       this.signedIn = true;
@@ -76,12 +76,12 @@ export default class Login extends Vue {
     }
   }
 
-  async loginUser(): Promise<void> {
+  public async loginUser(): Promise<void> {
     this.apiRequest = true;
     Auth.signIn(this.email, this.password).then(() => {
       this.apiRequest = false;
       this.$router.push({
-        path: "/familydashboard"
+        path: '/familydashboard'
       });
     });
   }

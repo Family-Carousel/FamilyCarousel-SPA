@@ -20,8 +20,8 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
 import { SnackBar } from '@/store/modules/snackbar/store-snackbar';
+import { Component, Vue } from 'vue-property-decorator';
 
 @Component({
   name: 'App'
@@ -32,6 +32,5 @@ export default class App extends Vue {
   get snackBars() {
     return SnackBar.snackBars;
   }
-
 }
 </script>

@@ -128,28 +128,28 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
-import { validationMixin } from "vuelidate";
-import LoginOrSignUpLayout from "@/layouts/LoginOrSignupLayout.vue";
-import { Auth } from "aws-amplify";
-import { AmplifyEventBus } from "aws-amplify-vue";
-import { required, minLength, email } from "vuelidate/lib/validators";
+import LoginOrSignUpLayout from '@/layouts/LoginOrSignupLayout.vue';
 import {
-  hasNumber,
   hasLowerCaseLetter,
-  hasUpperCaseLetter,
-  hasSpecialCharacter
-} from "../../validators/password";
-import { Validate, Validations } from "vuelidate-property-decorators";
+  hasNumber,
+  hasSpecialCharacter,
+  hasUpperCaseLetter
+} from '@/validators/password';
+import { Auth } from 'aws-amplify';
+import { AmplifyEventBus } from 'aws-amplify-vue';
+import { Component, Vue } from 'vue-property-decorator';
+import { validationMixin } from 'vuelidate';
+import { Validate, Validations } from 'vuelidate-property-decorators';
+import { email, minLength, required } from 'vuelidate/lib/validators';
 
 @Component({
-  name: "SignUp",
-  mixins: [validationMixin]
+  mixins: [validationMixin],
+  name: 'SignUp'
 })
 export default class SignUp extends Vue {
+  public error: string | null = '';
   private apiRequest: boolean = false;
   private signedIn: boolean = false;
-  public error: string | null = "";
 
   @Validate({
     checked(val) {
@@ -159,10 +159,10 @@ export default class SignUp extends Vue {
   private userAgreement: boolean = false;
 
   @Validate({ required })
-  private displayName: string = "";
+  private displayName: string = '';
 
   @Validate({ required, email })
-  private email: string = "";
+  private email: string = '';
 
   @Validate({
     required,
@@ -172,14 +172,13 @@ export default class SignUp extends Vue {
     hasUpperCaseLetter,
     hasSpecialCharacter
   })
-  private password: string = "";
+  private password: string = '';
 
-  created(): void {
-    console.log("running");
+  public created(): void {
     this.$emit(`update:layout`, LoginOrSignUpLayout);
     this.isUserSignedIn();
-    AmplifyEventBus.$on("authState", info => {
-      if (info === "signedIn") {
+    AmplifyEventBus.$on('authState', (info) => {
+      if (info === 'signedIn') {
         this.isUserSignedIn();
       } else {
         this.signedIn = false;
@@ -187,7 +186,7 @@ export default class SignUp extends Vue {
     });
   }
 
-  async isUserSignedIn(): Promise<void> {
+  public async isUserSignedIn(): Promise<void> {
     try {
       const user = await Auth.currentAuthenticatedUser();
       this.signedIn = true;
@@ -196,7 +195,7 @@ export default class SignUp extends Vue {
     }
   }
 
-  async createAccount(): Promise<void> {
+  public async createAccount(): Promise<void> {
     this.apiRequest = true;
     Auth.signUp({
       username: this.email,
@@ -209,7 +208,7 @@ export default class SignUp extends Vue {
     }).then(() => {
       this.apiRequest = false;
       this.$router.push({
-        path: "/confirmSignup",
+        path: '/confirmSignup',
         query: { email: this.email }
       });
     });

@@ -2,7 +2,7 @@
   <v-flex xs12 sm8 md4>
     <v-flex xs12>
       <router-link to="/">
-        <v-img :src="require('../../assets/logo.png')" class="mb-8" contain height="200"></v-img>
+        <v-img :src="require('@/assets/logo.png')" class="mb-8" contain height="200"></v-img>
       </router-link>
     </v-flex>
     <v-card class="elevation-12">
@@ -41,25 +41,25 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
-import LoginOrSignUpLayout from "../../layouts/LoginOrSignupLayout.vue";
-import { Auth } from "aws-amplify";
-import { AmplifyEventBus } from "aws-amplify-vue";
+import { Auth } from 'aws-amplify';
+import { AmplifyEventBus } from 'aws-amplify-vue';
+import { Component, Vue } from 'vue-property-decorator';
+import LoginOrSignUpLayout from '../../layouts/LoginOrSignupLayout.vue';
 
 @Component({
-  name: "ConfirmSignUp"
+  name: 'ConfirmSignUp'
 })
 export default class ConfirmSignUp extends Vue {
-  private email: string = this.$route.query.email.toString() || "";
+  private email: string = this.$route.query.email.toString() || '';
   private apiRequest: boolean = false;
   private signedIn: boolean = false;
-  private confirmCode: string = "";
+  private confirmCode: string = '';
 
-  created() {
+  public created() {
     this.$emit(`update:layout`, LoginOrSignUpLayout);
     this.isUserSignedIn();
-    AmplifyEventBus.$on("authState", info => {
-      if (info === "signedIn") {
+    AmplifyEventBus.$on('authState', (info) => {
+      if (info === 'signedIn') {
         this.isUserSignedIn();
       } else {
         this.signedIn = false;
@@ -67,7 +67,7 @@ export default class ConfirmSignUp extends Vue {
     });
   }
 
-  async isUserSignedIn(): Promise<void> {
+  public async isUserSignedIn(): Promise<void> {
     try {
       await Auth.currentAuthenticatedUser();
       this.signedIn = true;
@@ -76,12 +76,12 @@ export default class ConfirmSignUp extends Vue {
     }
   }
 
-  async confirmSignup(): Promise<void> {
+  public async confirmSignup(): Promise<void> {
     Auth.confirmSignUp(this.email, this.confirmCode, {
       forceAliasCreation: true
     }).then(() => {
       this.$router.push({
-        path: "/login"
+        path: '/login'
       });
     });
   }

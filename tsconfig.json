@@ -9,7 +9,7 @@
     "noImplicitReturns": true,
     "moduleResolution": "node",
     "allowJs": true,
-    "esModuleInterop": true,
+    "strictFunctionTypes": false,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
