@@ -1,12 +1,15 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-// import AuthModule from './modules/auth/store.auth';
+import { IAuthState } from './modules/auth/store.auth';
+import { IFamilyState } from './modules/family/store-family';
 import { ISnackbarState } from './modules/snackbar/store-snackbar';
 
 Vue.use(Vuex);
 
 export interface IRootState {
-  SnackBar: ISnackbarState;
+  SnackBarState: ISnackbarState;
+  FamilyState: IFamilyState;
+  AuthState: IAuthState;
 }
 
 export default new Vuex.Store<IRootState>({});
