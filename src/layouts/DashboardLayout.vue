@@ -126,18 +126,23 @@
 import { Auth } from 'aws-amplify';
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
-interface DashboardLayoutObject {
+interface IDashboardLayoutObjectChildren {
+  icon: string;
+  text: string
+}
+
+interface IDashboardLayoutObject {
   icon: string;
   'icon-alt'?: string;
   text: string;
   model?: boolean;
-  children?: DashboardLayoutObject[];
+  children?: IDashboardLayoutObjectChildren[];
 }
 
-interface DashboardLayoutData {
+interface IDashboardLayoutData {
   dialog: boolean;
   drawer: boolean;
-  items: DashboardLayoutObject[];
+  items: IDashboardLayoutObject[];
 }
 
 @Component({
@@ -148,7 +153,7 @@ export default class DashboardLayout extends Vue {
 
   private dialog: boolean = false;
   private drawer: boolean = false;
-  private items = [
+  private items: IDashboardLayoutObject[] = [
     { icon: 'people', text: 'My Family' },
     {
       'icon': 'keyboard_arrow_up',

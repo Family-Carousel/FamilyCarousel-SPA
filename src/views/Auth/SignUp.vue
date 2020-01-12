@@ -198,12 +198,13 @@ export default class SignUp extends Vue {
   public async createAccount(): Promise<void> {
     this.apiRequest = true;
     Auth.signUp({
-      username: this.email,
-      password: this.password,
       attributes: {
         email: this.email,
         name: this.displayName
       },
+      password: this.password,
+      username: this.email,
+
       validationData: []
     }).then(() => {
       this.apiRequest = false;
