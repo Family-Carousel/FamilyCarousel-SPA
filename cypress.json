@@ -1,3 +1,9 @@
 {
-  "pluginsFile": "tests/e2e/plugins/index.js"
+  "baseUrl": "http://localhost:8080",
+  "fixturesFolder": "e2e/fixtures",
+  "integrationFolder": "e2e/integration",
+  "pluginsFile": "e2e/plugins/index.js",
+  "screenshotsFolders": "e2e/screenshots",
+  "suppoerFile": "e2e/support/index.js",
+  "videosFolder": "e2e/videos"
 }

@@ -66,22 +66,33 @@
   </v-container>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      email: null,
-      firstName: null
-    };
-  },
-  methods: {
-    submitForm() {
-      this.$refs.form.submit()
-      this.email = null;
-      this.firstName = null;
-    }
+<script lang="ts">
+import { Vue, Component } from "vue-property-decorator";
+import { SnackBar } from "@/store/modules/snackbar/store-snackbar";
+
+interface HomeComponentData {
+  email: string;
+  firstName: string;
+}
+
+@Component({
+  name: "HomeComponent"
+})
+export default class HomeComponent extends Vue {
+  private email: string = "";
+  private firstName: string = "";
+
+  private submitForm(): void {
+    SnackBar.setSnackBar({
+      text: `Thanks for signing up for our mailing list!`,
+      timeout: 6000,
+      color: 'success'
+    });
+    (this.$refs.form as HTMLFormElement).submit();
+    this.email = "";
+    this.firstName = "";
   }
-};
+}
 </script>
 
 <style>

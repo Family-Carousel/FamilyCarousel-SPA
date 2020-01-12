@@ -11,7 +11,7 @@
       </v-toolbar>
       <v-progress-linear v-if="apiRequest" :indeterminate="true" class="ma-0"></v-progress-linear>
       <v-card-text>
-        <v-form >
+        <v-form>
           <v-text-field v-model="email" label="email" name="email" prepend-icon="email" type="text"></v-text-field>
           <v-text-field
             v-model="password"
@@ -40,50 +40,46 @@
   </v-flex>
 </template>
 
-<script>
-import LoginOrSignUpLayout from "../../layouts/LoginOrSignupLayout";
-import { Auth } from "aws-amplify";
-import { AmplifyEventBus } from "aws-amplify-vue";
+<script lang="ts">
+import LoginOrSignUpLayout from '@/layouts/LoginOrSignupLayout.vue';
+import { authService } from '@/services/Auth.Service';
+import { Component, Vue } from 'vue-property-decorator';
 
-export default {
-  created() {
+@Component({
+  name: 'Login'
+})
+export default class Login extends Vue {
+  private password: string = '';
+  private email: string = '';
+  private signedIn: boolean = false;
+  private apiRequest: boolean = false;
+
+  public created() {
     this.$emit(`update:layout`, LoginOrSignUpLayout);
     this.isUserSignedIn();
-    AmplifyEventBus.$on("authState", info => {
-      if (info === "signedIn") {
-        this.isUserSignedIn();
-      } else {
-        this.signedIn = false;
-      }
-    });
-  },
-  data() {
-    return {
-      apiRequest: false,
-      signedIn: false,
-      email: "",
-      password: ""
-    };
-  },
-  methods: {
-    async isUserSignedIn() {
-      try {
-        await Auth.currentAuthenticatedUser();
-        this.signedIn = true;
-      } catch (e) {
-        this.signedIn = false;
-      }
-    },
-    async loginUser() {
-      this.apiRequest = true;
-      Auth.signIn(this.email, this.password)
-        .then(() => {
-          this.apiRequest = false;
-          this.$router.push({
-            path: "/familydashboard"
-          });
-        });
+  }
+
+  public async isUserSignedIn(): Promise<void> {
+    const authedUser = await authService.getCurrentAuthenticatedUser();
+
+    if (authedUser) {
+      this.signedIn = true;
+    } else {
+      this.signedIn = false;
     }
   }
-};
+
+  public async loginUser(): Promise<void> {
+    this.apiRequest = true;
+
+    const loggedInUser = await authService.logInUser(this.email, this.password);
+
+    if (!loggedInUser) {
+      this.$router.push({
+        path: '/familypicker'
+      });
+    }
+    this.apiRequest = false;
+  }
+}
 </script>

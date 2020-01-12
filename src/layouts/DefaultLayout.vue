@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <v-toolbar color="#0A3953" dark>
+      <v-toolbar color="primary" dark>
         <v-btn icon to="/">
           <v-icon>mdi-home</v-icon>
         </v-btn>
@@ -19,10 +19,20 @@
       <slot />
     </v-content>
 
-    <v-footer class="pa-3" color="#0A3953" dark fixed>
-      <v-spacer></v-spacer>
-      <div>FamilyCarousel.com&nbsp; &copy; {{ new Date().getFullYear() }}</div>
-      <v-spacer></v-spacer>
+    <v-footer class="pa-3" color="primary" dark fixed>
+      <v-col class="text-left">FamilyCarousel.com&nbsp; &copy; {{ new Date().getFullYear() }}</v-col>
+      <v-col class="text-right">v{{ $store.getters.appVersion }}</v-col>
     </v-footer>
   </div>
 </template>
+
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator';
+
+@Component({
+  name: 'DefaultLayout'
+})
+export default class DefaultLayout extends Vue {
+
+}
+</script>

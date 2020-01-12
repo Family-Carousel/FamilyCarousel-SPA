@@ -122,42 +122,61 @@
   </v-app>
 </template>
 
-<script>
-import { Auth } from "aws-amplify";
+<script lang="ts">
+import { Auth } from 'aws-amplify';
+import { Component, Prop, Vue } from 'vue-property-decorator';
 
-export default {
-  props: {
-    source: String
-  },
-  methods: {
-    logout() {
-      Auth.signOut().then(() => {
-        this.$router.push({
-          path: "/login"
-        });
+interface IDashboardLayoutObjectChildren {
+  icon: string;
+  text: string
+}
+
+interface IDashboardLayoutObject {
+  icon: string;
+  'icon-alt'?: string;
+  text: string;
+  model?: boolean;
+  children?: IDashboardLayoutObjectChildren[];
+}
+
+interface IDashboardLayoutData {
+  dialog: boolean;
+  drawer: boolean;
+  items: IDashboardLayoutObject[];
+}
+
+@Component({
+  name: 'DashboardLayout'
+})
+export default class DashboardLayout extends Vue {
+  @Prop(String) public readonly source: string = '';
+
+  private dialog: boolean = false;
+  private drawer: boolean = false;
+  private items: IDashboardLayoutObject[] = [
+    { icon: 'people', text: 'My Family' },
+    {
+      'icon': 'keyboard_arrow_up',
+      'icon-alt': 'keyboard_arrow_down',
+      'text': 'Tasks',
+      'model': true,
+      'children': [
+        { icon: 'work', text: 'Chores' },
+        { icon: 'list', text: 'Reminders' },
+        { icon: 'games', text: 'Fun Things' }
+      ]
+    },
+    { icon: 'help', text: 'Help' },
+    { icon: 'settings', text: 'Profile' },
+    { icon: 'chat_bubble', text: 'Send feedback' }
+  ];
+
+  private logout(): void {
+    Auth.signOut().then(() => {
+      this.$router.push({
+        path: '/'
       });
-    }
-  },
-  data: () => ({
-    dialog: false,
-    drawer: null,
-    items: [
-      { icon: "people", text: "My Family" },
-      {
-        icon: "keyboard_arrow_up",
-        "icon-alt": "keyboard_arrow_down",
-        text: "Tasks",
-        model: true,
-        children: [
-          { icon: "work", text: "Chores" },
-          { icon: "list", text: "Reminders" },
-          { icon: "games", text: "Fun Things" }
-        ]
-      },
-      { icon: "help", text: "Help" },
-      { icon: "settings", text: "Profile" },
-      { icon: "chat_bubble", text: "Send feedback" }
-    ]
-  })
-};
+    });
+  }
+}
 </script>
