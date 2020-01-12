@@ -84,7 +84,6 @@ import {
   hasUpperCaseLetter,
   hasSpecialCharacter
 } from "../../validators/password";
-import { ValidationProperties } from 'vue/types/vue';
 
 export default Vue.extend({
   created() {

@@ -67,30 +67,31 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { Vue, Component } from "vue-property-decorator";
+import { SnackBar } from "@/store/modules/snackbar/store-snackbar";
 
 interface HomeComponentData {
-  email: string,
-  firstName: string
+  email: string;
+  firstName: string;
 }
 
-export default Vue.extend({
-  name: 'HomeComponent',
-  data(): HomeComponentData {
-    return {
-      email: '',
-      firstName: ''
-    };
-  },
-  methods: {
-    submitForm(): void {
-      this.$store.dispatch('snackbar/setSnackbar', {text: `Thanks for signing up for our mailing list!`});
-      this.$refs.form.submit();
-      this.email = '';
-      this.firstName = '';
-    }
+@Component({
+  name: "HomeComponent"
+})
+export default class HomeComponent extends Vue {
+  private email: string = "";
+  private firstName: string = "";
+
+  private submitForm(): void {
+    SnackBar.setSnackBar({
+      text: `Thanks for signing up for our mailing list!`,
+      timeout: 6000
+    });
+    (this.$refs.form as HTMLFormElement).submit();
+    this.email = "";
+    this.firstName = "";
   }
-});
+}
 </script>
 
 <style>

@@ -10,8 +10,8 @@
         <v-spacer></v-spacer>
 
         <v-toolbar-items class="hidden-sm-and-down">
-          <v-btn disabled text to="/signup">Sign Up</v-btn>
-          <v-btn disabled text to="/login">Login</v-btn>
+          <v-btn text to="/signup">Sign Up</v-btn>
+          <v-btn text to="/login">Login</v-btn>
         </v-toolbar-items>
       </v-toolbar>
     </div>

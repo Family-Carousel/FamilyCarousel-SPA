@@ -1,6 +1,16 @@
+import { ISnackBar } from '@/interfaces/ISnackBar';
 import store from '@/store/store';
-import { Action, getModule, Module, Mutation, VuexModule } from 'vuex-module-decorators';
-import { ISnackBar } from '../../../interfaces/ISnackBar';
+import {
+  Action,
+  getModule,
+  Module,
+  Mutation,
+  VuexModule
+} from 'vuex-module-decorators';
+
+export interface ISnackbarState {
+  snackBars: ISnackBar[];
+}
 
 @Module({
   dynamic: true,
@@ -8,21 +18,20 @@ import { ISnackBar } from '../../../interfaces/ISnackBar';
   namespaced: true,
   store
 })
-class SnackBarModule extends VuexModule {
+class SnackBarModule extends VuexModule implements ISnackbarState {
   public snackBars: ISnackBar[] = [];
 
-  @Action
+  @Action({ commit: 'SET_SNACKBAR' })
   public async setSnackBar(snackBar: ISnackBar) {
     snackBar.showing = true;
     snackBar.color = snackBar.color || 'success';
-    this.context.commit('SET_SNACKBAR', snackBar);
+    return snackBar;
   }
 
   @Mutation
   private SET_SNACKBAR(snackBar: ISnackBar) {
-    this.snackBars.concat(snackBar);
+    return this.snackBars.push(snackBar);
   }
-
 }
 
-export default getModule(SnackBarModule);
+export const SnackBar = getModule(SnackBarModule);

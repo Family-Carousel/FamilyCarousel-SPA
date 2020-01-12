@@ -1,6 +1,6 @@
 export interface ISnackBar {
-    showing: boolean;
-    color: string;
+    showing?: boolean;
+    color?: string;
     text: string;
-    timeout?: string;
+    timeout: number;
 }

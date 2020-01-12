@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "target": "esnext",
+    "outDir": "dist",
     "module": "esnext",
     "strict": true,
     "jsx": "preserve",
@@ -15,7 +16,12 @@
     "noImplicitAny": false,
     "types": [
       "webpack-env",
-      "jest"
+      "jest",
+      "vuetify"
+    ],
+    "typeRoots": [
+      "./node_modules/@types",
+      "./node_modules/vuetify/types"
     ],
     "paths": {
       "@/*": [
@@ -38,6 +44,7 @@
   ],
   "exclude": [
     "node_modules",
-    "aws-exports.js"
+    "aws-exports.js",
+    "dist"
   ]
 }

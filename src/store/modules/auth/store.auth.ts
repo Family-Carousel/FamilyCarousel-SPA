@@ -2,25 +2,34 @@ import store from '@/store/store';
 import { Action, getModule, Module, Mutation, VuexModule } from 'vuex-module-decorators';
 import { IAuthData } from '../../../interfaces/IAuthData';
 
+export interface IAuthState {
+  currentLoggedInUserData: IAuthData;
+}
+
 @Module({
   dynamic: true,
   name: 'AuthModule',
   namespaced: true,
   store
 })
-class AuthModule extends VuexModule {
-  public currentLoggedInUserData: [] = [];
+class AuthModule extends VuexModule implements IAuthState {
+  public currentLoggedInUserData: IAuthData;
 
-  @Action
-  public async setSnackBar(userObject) {
-    this.context.commit('SET_CURRENTUSER', userObject);
+  constructor(currentLoggedInUserData: IAuthData) {
+    super(currentLoggedInUserData);
+    this.currentLoggedInUserData = {};
+ }
+
+  @Action({ commit: 'SET_CURRENTUSER' })
+  public async setCurrentUser(authObject: IAuthData): Promise<IAuthData> {
+    return authObject;
   }
 
   @Mutation
-  private SET_CURRENTUSER(userObject) {
-    this.currentLoggedInUserData = userObject;
+  private SET_CURRENTUSER(authObject) {
+    this.currentLoggedInUserData = authObject;
   }
 
 }
 
-export default getModule(AuthModule);
+export const Auth = getModule(AuthModule);
