@@ -7,7 +7,9 @@
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e",
-    "lint": "tslint --project . --fix"
+    "lint": "tslint --project . --fix",
+    "lint:nofix": "tslint --project ."
+
   },
   "dependencies": {
     "@mdi/font": "^4.5.95",
