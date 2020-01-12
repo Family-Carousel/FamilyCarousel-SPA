@@ -1,0 +1,40 @@
+{
+    "defaultSeverity": "warning",
+    "extends": [
+        "tslint:recommended"
+    ],
+    "linterOptions": {
+        "exclude": [
+            "*.json",
+            "**/*.json"
+        ]
+    },
+    "rules": {
+        "interface-name": true,
+        "ordered-imports": true,
+        "object-literal-sort-keys": true,
+        "trailing-comma": false,
+        "semicolon": true,
+        "arrow-parens": true,
+        "quotemark": [
+            true,
+            "single"
+        ],
+        "indent": [
+            true,
+            "spaces",
+            4
+        ],
+        "no-console": false,
+        "no-magic-numbers": {
+            "options": [
+                -1,
+                0,
+                1
+            ]
+        },
+        "max-file-line-count": {
+            "options": 500
+        }
+    }
+}

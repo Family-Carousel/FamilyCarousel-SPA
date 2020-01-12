@@ -4,37 +4,33 @@
       <component :is="layout">
         <router-view :layout.sync="layout" />
       </component>
-
       <v-snackbar
-        v-for="(snackbar, index) in snackbars.filter(s => s.showing)"
-        :key="snackbar.text + Math.random()"
+        v-for="(snackBar, index) in snackBars.filter(s => s.showing)"
+        :key="snackBar.text + Math.random()"
         :style="`bottom: ${(index * 60) + 8}px`"
-        v-model="snackbar.showing"
-        :timeout="snackbar.timeout"
-        :color="snackbar.color"
+        v-model="snackBar.showing"
+        :timeout="snackBar.timeout"
+        :color="snackBar.color"
       >
-        {{snackbar.text}}
-        <v-btn text @click="snackbar.showing = false">Close</v-btn>
+        {{snackBar.text}}
+        <v-btn text @click="snackBar.showing = false">Close</v-btn>
       </v-snackbar>
     </v-app>
   </div>
 </template>
 
-<script>
-import { mapState } from 'vuex';
+<script lang="ts">
+import { SnackBar } from '@/store/modules/snackbar/store-snackbar';
+import { Component, Vue } from 'vue-property-decorator';
 
-export default {
-  name: "App",
-  data() {
-    return {
-      layout: `div`
-    };
-  },
-  computed: {
-    ...mapState('snackbar', ['snackbars'])
-  },
-  created() {
-    document.title = process.env.VUE_APP_NAME;
+@Component({
+  name: 'App'
+})
+export default class App extends Vue {
+  public layout: string = `div`;
+
+  get snackBars() {
+    return SnackBar.snackBars;
   }
-};
+}
 </script>

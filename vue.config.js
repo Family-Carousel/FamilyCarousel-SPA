@@ -19,5 +19,5 @@ module.exports = {
       path.resolve(__dirname, `src/api/${apiClient}`)
     );
   },
-  transpileDependencies: ['vuetify']
+  transpileDependencies: ['vuetify', 'vuex-module-decorators']
 };

@@ -15,14 +15,22 @@
           <v-text-field
             @input="$v.displayName.$touch()"
             @blur="$v.displayName.$touch()"
-            :error-messages="displayNameErrors"
+            :error="$v.displayName.$anyDirty && $v.displayName.$invalid"
             required
             v-model="displayName"
             label="Display Name"
             name="username"
             prepend-icon="person"
             type="text"
-          ></v-text-field>
+            bottom-slots
+          >
+            <template v-slot:error>
+              <span
+                v-if="!$v.displayName.required"
+                v-text="$t('global.messages.validate.displayName.required')"
+              >Your username is required.</span>
+            </template>
+          </v-text-field>
           <v-text-field
             v-model="email"
             label="Email"
@@ -31,9 +39,21 @@
             type="text"
             @input="$v.email.$touch()"
             @blur="$v.email.$touch()"
-            :error-messages="emailErrors"
+            :error="$v.email.$anyDirty && $v.email.$invalid"
             required
-          ></v-text-field>
+            bottom-slots
+          >
+            <template v-slot:error>
+              <span
+                v-if="!$v.email.required"
+                v-text="$t('global.messages.validate.email.required')"
+              >Your username is required.</span>
+              <span
+                v-if="!$v.email.email"
+                v-text="$t('global.messages.validate.email.email')"
+              >Please enter a valid email address.</span>
+            </template>
+          </v-text-field>
           <v-text-field
             v-model="password"
             id="password"
@@ -43,22 +63,58 @@
             type="password"
             @input="$v.password.$touch()"
             @blur="$v.password.$touch()"
-            :error-messages="passwordErrors"
+            :error="$v.password.$anyDirty && $v.password.$invalid"
             required
-          ></v-text-field>
+            bottom-slots
+          >
+            <template v-slot:error>
+              <span
+                v-if="!$v.password.required"
+                v-text="$t('global.messages.validate.password.required')"
+              >Your password is required.</span>
+              <span
+                v-if="!$v.password.minLength"
+                v-text="$t('global.messages.validate.password.minLength')"
+              >Password must be a minimum of 8 characters.</span>
+              <span
+                v-if="!$v.password.hasNumber"
+                v-text="$t('global.messages.validate.password.hasNumber')"
+              >Password must contain a number.</span>
+              <span
+                v-if="!$v.password.hasLowerCaseLetter"
+                v-text="$t('global.messages.validate.password.hasLowerCaseLetter')"
+              >Password must contain a lower case letter.</span>
+              <span
+                v-if="!$v.password.hasUpperCaseLetter"
+                v-text="$t('global.messages.validate.password.hasUpperCaseLetter')"
+              >Password must contain a upper case letter.</span>
+              <span
+                v-if="!$v.password.hasSpecialCharacter"
+                v-text="$t('global.messages.validate.password.hasSpecialCharacter')"
+              >Password must contain a special character.</span>
+            </template>
+          </v-text-field>
           <v-checkbox
             v-model="userAgreement"
             @change="$v.userAgreement.$touch()"
             @blur="$v.userAgreement.$touch()"
-            :error-messages="userAgreementErrors"
+            :error="$v.userAgreement.$anyDirty && $v.userAgreement.$invalid"
             :rules="[v => !!v || 'You must agree to continue']"
             required
-            label="By signing up, I agree to Family Carousels terms of service and privacy policy"
-          ></v-checkbox>
+            label="I agree to Family Carousels terms and privacy policy"
+            bottom-slots
+          >
+            <template v-slot:error>
+              <span
+                v-if="!$v.userAgreement.required"
+                v-text="$t('global.messages.validate.userAgreement.required')"
+              >You must agree to continue.</span>
+            </template>
+          </v-checkbox>
         </v-form>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="primary" large @click="createAccount">Create Account</v-btn>
+          <v-btn color="primary" :disabled="$v.$invalid" large @click="createAccount">Create Account</v-btn>
           <v-spacer></v-spacer>
         </v-card-actions>
       </v-card-text>
@@ -71,125 +127,87 @@
   </v-flex>
 </template>
 
-<script>
-import LoginOrSignUpLayout from "../../layouts/LoginOrSignupLayout";
-import { Auth } from "aws-amplify";
-import { AmplifyEventBus } from "aws-amplify-vue";
-import { required, minLength, email } from "vuelidate/lib/validators";
+<script lang="ts">
+import LoginOrSignUpLayout from '@/layouts/LoginOrSignupLayout.vue';
+import { authService } from '@/services/Auth.Service';
+import { SnackBar } from '@/store/modules/snackbar/store-snackbar';
 import {
-  hasNumber,
   hasLowerCaseLetter,
-  hasUpperCaseLetter,
-  hasSpecialCharacter
-} from "../../validators/password";
+  hasNumber,
+  hasSpecialCharacter,
+  hasUpperCaseLetter
+} from '@/validators/password';
+import { Auth } from 'aws-amplify';
+import { AmplifyEventBus } from 'aws-amplify-vue';
+import { Component, Vue } from 'vue-property-decorator';
+import { validationMixin } from 'vuelidate';
+import { Validate, Validations } from 'vuelidate-property-decorators';
+import { email, minLength, required } from 'vuelidate/lib/validators';
 
-export default {
-  created() {
+@Component({
+  mixins: [validationMixin],
+  name: 'SignUp'
+})
+export default class SignUp extends Vue {
+  public error: string | null = '';
+  private apiRequest: boolean = false;
+  private signedIn: boolean = false;
+
+  @Validate({
+    checked(val) {
+      return val;
+    }
+  })
+  private userAgreement: boolean = false;
+
+  @Validate({ required })
+  private displayName: string = '';
+
+  @Validate({ required, email })
+  private email: string = '';
+
+  @Validate({
+    required,
+    minLength: minLength(8),
+    hasNumber,
+    hasLowerCaseLetter,
+    hasUpperCaseLetter,
+    hasSpecialCharacter
+  })
+  private password: string = '';
+
+  public created(): void {
     this.$emit(`update:layout`, LoginOrSignUpLayout);
     this.isUserSignedIn();
-    AmplifyEventBus.$on("authState", info => {
-      if (info === "signedIn") {
-        this.isUserSignedIn();
-      } else {
-        this.signedIn = false;
-      }
-    });
-  },
-  data() {
-    return {
-      apiRequest: false,
-      signedIn: false,
-      displayName: "",
-      email: "",
-      password: "",
-      userAgreement: false
-    };
-  },
-  validations: {
-    displayName: { required },
-    email: { required, email },
-    password: {
-      required,
-      minLength: minLength(8),
-      hasNumber,
-      hasLowerCaseLetter,
-      hasUpperCaseLetter,
-      hasSpecialCharacter
-    },
-    userAgreement: {
-      checked(val) {
-        return val;
-      }
-    }
-  },
-  computed: {
-    displayNameErrors() {
-      const errors = [];
-      if (!this.$v.displayName.$dirty) return errors;
-      !this.$v.displayName.required && errors.push("Username is required");
-      return errors;
-    },
-    passwordErrors() {
-      const errors = [];
-      if (!this.$v.password.$dirty) return errors;
-      !this.$v.password.required && errors.push("Password is required");
-      !this.$v.password.minLength &&
-        errors.push("Password must be minimum of 8 characters");
-      !this.$v.password.hasNumber &&
-        errors.push("Password must contain a number");
-      !this.$v.password.hasLowerCaseLetter &&
-        errors.push("Password must contain a lower case letter");
-      !this.$v.password.hasUpperCaseLetter &&
-        errors.push("Password must contain a capital letter");
-      !this.$v.password.hasSpecialCharacter &&
-        errors.push("Password must contain a special character");
-      return errors;
-    },
-    emailErrors() {
-      const errors = [];
-      if (!this.$v.email.$dirty) return errors;
-      !this.$v.email.required && errors.push("Email is required");
-      !this.$v.email.email && errors.push("You must enter a valid email");
-      return errors;
-    },
-    userAgreementErrors() {
-      const errors = [];
-      if (!this.$v.userAgreement.$dirty) return errors;
-      !this.$v.userAgreement.required &&
-        errors.push("You must agree to continue");
-      return errors;
-    }
-  },
-  methods: {
-    async isUserSignedIn() {
-      try {
-        await Auth.currentAuthenticatedUser();
-        this.signedIn = true;
-      } catch (e) {
-        this.signedIn = false;
-      }
-    },
-    async createAccount() {
-      this.$v.$touch();
-      if (!this.$v.$dirty) {
-        this.apiRequest = true;
-        Auth.signUp({
-          username: this.email,
-          password: this.password,
-          attributes: {
-            email: this.email,
-            name: this.displayName
-          },
-          validationData: []
-        }).then(() => {
-          this.apiRequest = false;
-          this.$router.push({
-            path: "/confirmSignup",
-            query: { email: this.email }
-          });
-        });
-      }
+  }
+
+  public async isUserSignedIn(): Promise<void> {
+    try {
+      const user = await Auth.currentAuthenticatedUser();
+      this.signedIn = true;
+    } catch (e) {
+      this.signedIn = false;
     }
   }
-};
+
+  public async createAccount(): Promise<void> {
+    this.apiRequest = true;
+    const signInObject = await authService.SignUpUser(
+      this.email,
+      this.displayName,
+      this.password
+    );
+
+    console.log(signInObject);
+
+    if (signInObject.user && signInObject.user.username === this.email) {
+      this.$router.push({
+        path: '/confirmSignup',
+        query: { email: this.email }
+      });
+    }
+    
+    this.apiRequest = false;
+  }
+}
 </script>

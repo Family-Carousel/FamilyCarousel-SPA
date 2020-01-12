@@ -29,39 +29,39 @@
   </v-flex>
 </template>
 
-<script>
-import LoginOrSignUpLayout from "../../layouts/LoginOrSignupLayout";
-import { Auth } from "aws-amplify";
-import { AmplifyEventBus } from "aws-amplify-vue";
+<script lang="ts">
+import { Auth } from 'aws-amplify';
+import { AmplifyEventBus } from 'aws-amplify-vue';
+import { Component, Vue } from 'vue-property-decorator';
+import LoginOrSignUpLayout from '../../layouts/LoginOrSignupLayout.vue';
 
-export default {
-  created() {
+@Component({
+  name: 'ForgotPassword'
+})
+export default class ForgotPassword extends Vue {
+  private email: string = '';
+  private apiRequest: boolean = false;
+  private signedIn: boolean = false;
+
+  public created() {
     this.$emit(`update:layout`, LoginOrSignUpLayout);
     this.isUserSignedIn();
-    AmplifyEventBus.$on("authState", info => {
-      if (info === "signedIn") {
+    AmplifyEventBus.$on('authState', (info) => {
+      if (info === 'signedIn') {
         this.isUserSignedIn();
       } else {
         this.signedIn = false;
       }
     });
-  },
-  data() {
-    return {
-      email: "email here",
-      apiRequest: false,
-      signedIn: false
-    };
-  },
-  methods: {
-    async isUserSignedIn() {
-      try {
-        await Auth.currentAuthenticatedUser();
-        this.signedIn = true;
-      } catch (e) {
-        this.signedIn = false;
-      }
+  }
+
+  public async isUserSignedIn(): Promise<void> {
+    try {
+      await Auth.currentAuthenticatedUser();
+      this.signedIn = true;
+    } catch (e) {
+      this.signedIn = false;
     }
   }
-};
+}
 </script>

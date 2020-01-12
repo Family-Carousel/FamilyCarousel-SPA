@@ -2,7 +2,7 @@
   <v-flex xs12 sm8 md4>
     <v-flex xs12>
       <router-link to="/">
-        <v-img :src="require('../../assets/logo.png')" class="mb-8" contain height="200"></v-img>
+        <v-img :src="require('@/assets/logo.png')" class="mb-8" contain height="200"></v-img>
       </router-link>
     </v-flex>
     <v-card class="elevation-12">
@@ -40,50 +40,60 @@
   </v-flex>
 </template>
 
-<script>
-import LoginOrSignUpLayout from "../../layouts/LoginOrSignupLayout";
-import { Auth } from "aws-amplify";
-import { AmplifyEventBus } from "aws-amplify-vue";
+<script lang="ts">
+import { SnackBar } from '@/store/modules/snackbar/store-snackbar';
+import { Auth } from 'aws-amplify';
+import { AmplifyEventBus } from 'aws-amplify-vue';
+import { Component, Vue } from 'vue-property-decorator';
+import LoginOrSignUpLayout from '../../layouts/LoginOrSignupLayout.vue';
 
-export default {
-  created() {
+@Component({
+  name: 'ConfirmSignUp'
+})
+export default class ConfirmSignUp extends Vue {
+  private email: string = '';
+  private apiRequest: boolean = false;
+  private signedIn: boolean = false;
+  private confirmCode: string = '';
+
+  public created() {
+    this.email = this.$route.query.email.toString();
     this.$emit(`update:layout`, LoginOrSignUpLayout);
     this.isUserSignedIn();
-    AmplifyEventBus.$on("authState", info => {
-      if (info === "signedIn") {
+    AmplifyEventBus.$on('authState', (info) => {
+      if (info === 'signedIn') {
         this.isUserSignedIn();
       } else {
         this.signedIn = false;
       }
     });
-  },
-  data() {
-    return {
-      email: this.$route.query.email,
-      apiRequest: false,
-      signedIn: false,
-      confirmCode: ""
-    };
-  },
-  methods: {
-    async isUserSignedIn() {
-      try {
-        await Auth.currentAuthenticatedUser();
-        this.signedIn = true;
-      } catch (e) {
-        this.signedIn = false;
-      }
-    },
-    async confirmSignup() {
-      Auth.confirmSignUp(this.email, this.confirmCode, {
-        forceAliasCreation: true
-      })
-        .then(() => {
-          this.$router.push({
-            path: "/login"
-          });
-        });
+  }
+
+  private async isUserSignedIn(): Promise<void> {
+    try {
+      await Auth.currentAuthenticatedUser();
+      this.signedIn = true;
+    } catch (e) {
+      this.signedIn = false;
     }
   }
-};
+
+  private async confirmSignup(): Promise<void> {
+    Auth.confirmSignUp(this.email, this.confirmCode, {
+      forceAliasCreation: true
+    })
+      .then(() => {
+        this.$router.push({
+          path: '/login'
+        });
+      })
+      .catch((err) => {
+        SnackBar.setSnackBar({
+          text: `${err.message}`,
+          timeout: 60000,
+          color: 'error'
+        });
+      });
+  }
+}
 </script>
