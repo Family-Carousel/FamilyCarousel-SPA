@@ -123,59 +123,55 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import { Auth } from "aws-amplify";
+import { Auth } from 'aws-amplify';
+import { Component, Prop, Vue } from 'vue-property-decorator';
 
 interface DashboardLayoutObject {
-  icon: string,
-  'icon-alt'?: string,
-  text: string,
-  model?: boolean,
-  children?: DashboardLayoutObject[]
+  icon: string;
+  'icon-alt'?: string;
+  text: string;
+  model?: boolean;
+  children?: DashboardLayoutObject[];
 }
 
 interface DashboardLayoutData {
-  dialog: boolean,
-  drawer: boolean,
-  items: DashboardLayoutObject[]
+  dialog: boolean;
+  drawer: boolean;
+  items: DashboardLayoutObject[];
 }
 
-export default Vue.extend({
-  name: 'DashboardLayout',
-  props: {
-    source: String
-  },
-  methods: {
-    logout(): void {
-      Auth.signOut().then(() => {
-        this.$router.push({
-          path: "/"
-        });
-      });
-    }
-  },
-  data(): DashboardLayoutData {
-    return {
-      dialog: false,
-      drawer: false,
-      items: [
-        { icon: "people", text: "My Family" },
-        {
-          icon: "keyboard_arrow_up",
-          "icon-alt": "keyboard_arrow_down",
-          text: "Tasks",
-          model: true,
-          children: [
-            { icon: "work", text: "Chores" },
-            { icon: "list", text: "Reminders" },
-            { icon: "games", text: "Fun Things" }
-          ]
-        },
-        { icon: "help", text: "Help" },
-        { icon: "settings", text: "Profile" },
-        { icon: "chat_bubble", text: "Send feedback" }
+@Component({
+  name: 'DashboardLayout'
+})
+export default class DashboardLayout extends Vue {
+  @Prop(String) public readonly source: string = '';
+
+  private dialog: boolean = false;
+  private drawer: boolean = false;
+  private items = [
+    { icon: 'people', text: 'My Family' },
+    {
+      'icon': 'keyboard_arrow_up',
+      'icon-alt': 'keyboard_arrow_down',
+      'text': 'Tasks',
+      'model': true,
+      'children': [
+        { icon: 'work', text: 'Chores' },
+        { icon: 'list', text: 'Reminders' },
+        { icon: 'games', text: 'Fun Things' }
       ]
-    };
+    },
+    { icon: 'help', text: 'Help' },
+    { icon: 'settings', text: 'Profile' },
+    { icon: 'chat_bubble', text: 'Send feedback' }
+  ];
+
+  private logout(): void {
+    Auth.signOut().then(() => {
+      this.$router.push({
+        path: '/'
+      });
+    });
   }
-});
+}
 </script>

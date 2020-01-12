@@ -9,8 +9,12 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-export default Vue.extend({
-  name: 'LoginOrSignupLayer'
-});
+import { Component, Vue } from 'vue-property-decorator';
+
+@Component({
+  name: 'LoginOrSignupLayout'
+})
+export default class LoginOrSignupLayout extends Vue {
+
+}
 </script>

@@ -27,9 +27,12 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { Component, Vue } from 'vue-property-decorator';
 
-export default Vue.extend({
-  name: 'DefaultLayout'  
-});
+@Component({
+  name: 'DefaultLayout'
+})
+export default class DefaultLayout extends Vue {
+
+}
 </script>
