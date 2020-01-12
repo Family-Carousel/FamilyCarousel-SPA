@@ -1,6 +1,6 @@
+import { IAuthData } from '@/interfaces/IAuthData';
 import store from '@/store/store';
 import { Action, getModule, Module, Mutation, VuexModule } from 'vuex-module-decorators';
-import { IAuthData } from '../../../interfaces/IAuthData';
 
 export interface IAuthState {
   currentLoggedInUserData: IAuthData;

@@ -41,12 +41,20 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { Vue, Component } from "vue-property-decorator";
 import LoginOrSignUpLayout from "../../layouts/LoginOrSignupLayout.vue";
 import { Auth } from "aws-amplify";
 import { AmplifyEventBus } from "aws-amplify-vue";
 
-export default Vue.extend({
+@Component({
+  name: "ConfirmSignUp"
+})
+export default class ConfirmSignUp extends Vue {
+  private email: string = this.$route.query.email.toString() || "";
+  private apiRequest: boolean = false;
+  private signedIn: boolean = false;
+  private confirmCode: string = "";
+
   created() {
     this.$emit(`update:layout`, LoginOrSignUpLayout);
     this.isUserSignedIn();
@@ -57,34 +65,25 @@ export default Vue.extend({
         this.signedIn = false;
       }
     });
-  },
-  data() {
-    return {
-      email: this.$route.query.email,
-      apiRequest: false,
-      signedIn: false,
-      confirmCode: ""
-    };
-  },
-  methods: {
-    async isUserSignedIn(): Promise<void> {
-      try {
-        await Auth.currentAuthenticatedUser();
-        this.signedIn = true;
-      } catch (e) {
-        this.signedIn = false;
-      }
-    },
-    async confirmSignup(): Promise<void> {
-      Auth.confirmSignUp(this.email, this.confirmCode, {
-        forceAliasCreation: true
-      })
-        .then(() => {
-          this.$router.push({
-            path: "/login"
-          });
-        });
+  }
+
+  async isUserSignedIn(): Promise<void> {
+    try {
+      await Auth.currentAuthenticatedUser();
+      this.signedIn = true;
+    } catch (e) {
+      this.signedIn = false;
     }
   }
-});
+
+  async confirmSignup(): Promise<void> {
+    Auth.confirmSignUp(this.email, this.confirmCode, {
+      forceAliasCreation: true
+    }).then(() => {
+      this.$router.push({
+        path: "/login"
+      });
+    });
+  }
+}
 </script>

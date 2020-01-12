@@ -30,12 +30,19 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { Vue, Component } from "vue-property-decorator";
 import LoginOrSignUpLayout from "../../layouts/LoginOrSignupLayout.vue";
 import { Auth } from "aws-amplify";
 import { AmplifyEventBus } from "aws-amplify-vue";
 
-export default Vue.extend({
+@Component({
+  name: "ForgotPassword"
+})
+export default class ForgotPassword extends Vue {
+  private email: string = "";
+  private apiRequest: boolean = false;
+  private signedIn: boolean = false;
+
   created() {
     this.$emit(`update:layout`, LoginOrSignUpLayout);
     this.isUserSignedIn();
@@ -46,23 +53,15 @@ export default Vue.extend({
         this.signedIn = false;
       }
     });
-  },
-  data() {
-    return {
-      email: "email here",
-      apiRequest: false,
-      signedIn: false
-    };
-  },
-  methods: {
-    async isUserSignedIn(): Promise<void> {
-      try {
-        await Auth.currentAuthenticatedUser();
-        this.signedIn = true;
-      } catch (e) {
-        this.signedIn = false;
-      }
+  }
+
+  async isUserSignedIn(): Promise<void> {
+    try {
+      await Auth.currentAuthenticatedUser();
+      this.signedIn = true;
+    } catch (e) {
+      this.signedIn = false;
     }
   }
-});
+}
 </script>
