@@ -5,15 +5,14 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { Component, Vue } from 'vue-property-decorator';
 
-export default Vue.extend({
-    data() {
-        return {
+@Component({
+    name: 'CreateMemberComponent'
+})
+export default class CreateMemberComponent extends Vue {
 
-        };
-    }
-});
+}
 </script>
 
 <style lang="stylus" scoped>

@@ -76,28 +76,25 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { Component, Vue } from 'vue-property-decorator';
 
-export default Vue.extend({
-  components: {},
-  data() {
-    return {
-      name: null,
-      slider: 1,
-      range: [1, 6],
-      min: 1,
-      max: 6,
-      pets: false,
-      termsOfService: false,
-      step: 1
-    };
-  },
-  methods: {
-    async createNewFamily() {
-      this.step = 2;
-    }
+@Component({
+  name: 'CreateFamilyComponent'
+})
+export default class CreateFamilyComponent extends Vue {
+  private name: string = '';
+  private slider: number = 1;
+  private range = [1, 6];
+  private min: number = 1;
+  private max: number = 1;
+  private pets: boolean = false;
+  private termsOfService: boolean = false;
+  private step: number = 1;
+
+  public async createNewFamily() {
+    this.step = 2;
   }
-});
+}
 </script>
 
 <style lang="stylus" scoped></style>
