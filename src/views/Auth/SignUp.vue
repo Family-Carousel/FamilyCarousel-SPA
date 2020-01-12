@@ -129,6 +129,7 @@
 
 <script lang="ts">
 import LoginOrSignUpLayout from '@/layouts/LoginOrSignupLayout.vue';
+import { authService } from '@/services/Auth.Service';
 import { SnackBar } from '@/store/modules/snackbar/store-snackbar';
 import {
   hasLowerCaseLetter,
@@ -178,13 +179,6 @@ export default class SignUp extends Vue {
   public created(): void {
     this.$emit(`update:layout`, LoginOrSignUpLayout);
     this.isUserSignedIn();
-    AmplifyEventBus.$on('authState', (info) => {
-      if (info === 'signedIn') {
-        this.isUserSignedIn();
-      } else {
-        this.signedIn = false;
-      }
-    });
   }
 
   public async isUserSignedIn(): Promise<void> {
@@ -197,34 +191,23 @@ export default class SignUp extends Vue {
   }
 
   public async createAccount(): Promise<void> {
-    let object;
     this.apiRequest = true;
-    object = Auth.signUp({
-      attributes: {
-        email: this.email,
-        name: this.displayName
-      },
-      password: this.password,
-      username: this.email,
+    const signInObject = await authService.SignUpUser(
+      this.email,
+      this.displayName,
+      this.password
+    );
 
-      validationData: []
-    })
-      .then(() => {
-        this.apiRequest = false;
-        console.log('signup object', object);
-        this.$router.push({
-          path: '/confirmSignup',
-          query: { email: this.email }
-        });
-      })
-      .catch((err) => {
-        SnackBar.setSnackBar({
-          text: `${err.message}`,
-          timeout: 60000,
-          color: 'error'
-        });
-        this.apiRequest = false;
+    console.log(signInObject);
+
+    if (signInObject.user && signInObject.user.username === this.email) {
+      this.$router.push({
+        path: '/confirmSignup',
+        query: { email: this.email }
       });
+    }
+    
+    this.apiRequest = false;
   }
 }
 </script>

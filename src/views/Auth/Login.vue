@@ -42,10 +42,7 @@
 
 <script lang="ts">
 import LoginOrSignUpLayout from '@/layouts/LoginOrSignupLayout.vue';
-import { SnackBar } from '@/store/modules/snackbar/store-snackbar';
-import { UserAuth } from '@/store/modules/auth/store.auth';
-import { Auth } from 'aws-amplify';
-import { AmplifyEventBus } from 'aws-amplify-vue';
+import { authService } from '@/services/Auth.Service';
 import { Component, Vue } from 'vue-property-decorator';
 
 @Component({
@@ -60,49 +57,29 @@ export default class Login extends Vue {
   public created() {
     this.$emit(`update:layout`, LoginOrSignUpLayout);
     this.isUserSignedIn();
-    AmplifyEventBus.$on('authState', (info) => {
-      if (info === 'signedIn') {
-        this.isUserSignedIn();
-      } else {
-        this.signedIn = false;
-      }
-    });
   }
 
   public async isUserSignedIn(): Promise<void> {
-    try {
-      await Auth.currentAuthenticatedUser();
+    const authedUser = await authService.getCurrentAuthenticatedUser();
+
+    if (authedUser) {
       this.signedIn = true;
-    } catch (e) {
+    } else {
       this.signedIn = false;
     }
   }
 
   public async loginUser(): Promise<void> {
     this.apiRequest = true;
-    Auth.signIn(this.email, this.password)
-      .then((res) => {
-        console.log('sign in object', res);
-        UserAuth.setCurrentUser({
-          id: res.username,
-          email: res.attributes.email,
-          displayName: res.attributes.name,
-          loginTime: res.signInUserSession.idToken.payload.iat,
-          expTime: res.signInUserSession.idToken.payload.exp,
-          jwt: res.signInUserSession.accessToken.jwtToken
-        });
-        this.apiRequest = false;
-        this.$router.push({
-          path: '/familypicker'
-        });
-      })
-      .catch((err) => {
-        SnackBar.setSnackBar({
-          text: `${err.message}`,
-          timeout: 60000,
-          color: 'error'
-        });
+
+    const loggedInUser = await authService.logInUser(this.email, this.password);
+
+    if (!loggedInUser) {
+      this.$router.push({
+        path: '/familypicker'
       });
+    }
+    this.apiRequest = false;
   }
 }
 </script>
